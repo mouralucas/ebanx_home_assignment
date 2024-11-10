@@ -1,0 +1,5 @@
+services:
+  backend-service:
+    build: .
+    ports:
+      - "8001:8001"
