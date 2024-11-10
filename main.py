@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from starlette import status
 
 from backend.settings import settings
 from routes import account
@@ -16,8 +17,14 @@ app = FastAPI(
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_404_handler(request, exc: StarletteHTTPException):
-    if exc.status_code == 404:
-        return JSONResponse(content=0, status_code=404)
+    """
+    Custom 404 exception handler to suit the required output with integer 0
+    :param request:
+    :param exc:
+    :return:
+    """
+    if exc.status_code == status.HTTP_404_NOT_FOUND:
+        return JSONResponse(content=0, status_code=status.HTTP_404_NOT_FOUND)
     return await app.default_exception_handler(request, exc)
 
 app.include_router(account.router)

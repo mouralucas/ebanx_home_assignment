@@ -14,10 +14,10 @@ class GetBalanceSchema(BaseModel):
 
 
 class ExecuteEventRequest(BaseModel):
-    event_type: Literal['withdraw', 'deposit', 'transfer'] = Field(..., alias='type', description='The event type')
-    origin: str | None = Field(None, description='The id of origin account')
-    destination: str | None = Field(None, description='The id of destination account')
-    amount: int = Field(..., description='')
+    event_type: Literal['withdraw', 'deposit', 'transfer'] = Field(..., alias='type', description='The event type, It can by one of \'withdraw\', \'deposit\' or \'transfer\'')
+    origin_account_id: str | None = Field(None, alias='origin', description='The id of origin account')
+    destination_account_id: str | None = Field(None, alias='destination', description='The id of destination account')
+    amount: int = Field(..., description='The amount of the operation')
 
 
 class ExecuteEventResponse(BaseModel):

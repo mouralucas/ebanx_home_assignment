@@ -9,7 +9,12 @@ class AccountManager:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def reset_state(self):
+    @staticmethod
+    async def reset_state():
+        """
+        Drop and then recreate all tables in database
+        :return:
+        """
         async with sessionmanager.connect() as connection:
             await connection.run_sync(Base.metadata.drop_all)
             await connection.run_sync(Base.metadata.create_all)
@@ -17,6 +22,12 @@ class AccountManager:
         return True
 
     async def get_account(self, account_id: str):
+        """
+        Fetch the account in the database using the given account id.
+        If account not found return None to be processed by the caller
+        :param account_id:
+        :return:
+        """
         query = select(AccountModel).where(AccountModel.id == account_id)
 
         try:
