@@ -2,6 +2,8 @@ from fastapi import FastAPI
 
 from backend.settings import settings
 from routes import account
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI(
     title=settings.project_name,
@@ -12,14 +14,10 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+@app.exception_handler(StarletteHTTPException)
+async def custom_404_handler(request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return JSONResponse(content=0, status_code=404)
+    return await app.default_exception_handler(request, exc)
 
 app.include_router(account.router)
-
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello World"}
-# '
-#
-# @app.get("/hello/{name}")
-# async def say_hello(name: str):
-#     return {"message": f"Hello {name}"}
