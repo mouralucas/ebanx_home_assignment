@@ -21,3 +21,5 @@ docker-compose build --no-cache
 ```bash
 docker-compose up
 ```
+
+The data is handled using an in-memory database

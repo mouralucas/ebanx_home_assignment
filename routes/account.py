@@ -12,7 +12,7 @@ from services.account import AccountService
 router = APIRouter(prefix="", tags=['Account'])
 
 
-@router.post('/reset', summary='Reset database state', description='Reset database state before starting, create necessary accounts')
+@router.post('/reset', summary='Reset database state', description='Reset database state before starting')
 async def reset(
         session: AsyncSession = Depends(db_session),
 ):
