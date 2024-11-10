@@ -1,7 +1,8 @@
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 from watchfiles import awatch
 
 from backend.database import db_session
@@ -15,7 +16,8 @@ router = APIRouter(prefix="", tags=['Account'])
 async def reset(
         session: AsyncSession = Depends(db_session),
 ):
-    return await AccountService(session=session).reset_state()
+    await AccountService(session=session).reset_state()
+    return Response(content="OK")
 
 @router.get('/balance', summary='Get account balance')
 async def get_balance(
@@ -25,7 +27,7 @@ async def get_balance(
     return await AccountService(session=session).get_balance(account_id=params.account_id)
 
 
-@router.post('/event', summary='Create event', response_model_exclude_none=True)
+@router.post('/event', summary='Create event', response_model_exclude_none=True, status_code=status.HTTP_201_CREATED)
 async def account_event(
         params: ExecuteEventRequest,
         session: AsyncSession = Depends(db_session)
